@@ -3,7 +3,12 @@
   "main": "./lib/atom-codekit",
   "version": "0.0.0",
   "description": "Auto switch codekit projects and preview projects with a hotkey!",
-  "repository": "https://github.com/peterjohnhunt/atom-codekit.git",
+  "keywords": [
+    "Codekit",
+    "PeterJohnHunt",
+    "PeterJohn"
+  ],
+  "repository": "https://github.com/peterjohnhunt/atom-codekit",
   "license": "MIT",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
