@@ -1,16 +1,22 @@
 # See https://atom.io/docs/latest/hacking-atom-package-word-count#menus for more details
 'context-menu':
+  '.project-root > .header': [
+    {
+      'label': 'Add Project To Codekit'
+      'command': 'atom-codekit:addProject'
+    }
+  ],
   'atom-text-editor': [
     {
-      'label': 'Toggle atom-codekit'
-      'command': 'atom-codekit:toggle'
+      'label': 'Preview Project'
+      'command': 'atom-codekit:previewProject'
     }
   ]
 'menu': [
   {
     'label': 'Packages'
     'submenu': [
-      'label': 'atom-codekit'
+      'label': 'Codekit Commands'
       'submenu': [
         {
           'label': 'Preview Project'

@@ -7,6 +7,7 @@ module.exports =
     @switchProject(atom.workspace.getActivePaneItem())
     @subscriptions = new CompositeDisposable
     @subscriptions.add atom.commands.add 'atom-workspace', 'atom-codekit:previewProject': => @previewProject()
+    @subscriptions.add atom.commands.add '.project-root > .header', 'atom-codekit:addProject': => @addProject()
     @subscriptions.add atom.workspace.onDidChangeActivePaneItem (callback) => @switchProject(callback)
 
   deactivate: ->
@@ -18,6 +19,13 @@ module.exports =
 
   previewProject: ->
     script = 'tell application "CodeKit" to preview in browser'
+    applescript.execString(script)
+
+  addProject: ->
+    treeView = atom.packages.getLoadedPackage('tree-view');
+    treeView = require(treeView.mainModulePath);
+    packageObj = treeView.serialize();
+    script = "tell application \"CodeKit\" to add project at path \"#{packageObj.selectedPath}\""
     applescript.execString(script)
 
   switchProject: (newPanel) ->
