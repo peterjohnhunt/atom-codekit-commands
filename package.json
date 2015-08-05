@@ -8,7 +8,7 @@
     "PeterJohnHunt",
     "PeterJohn"
   ],
-  "repository": "https://github.com/peterjohnhunt/atom-codekit",
+  "repository": "https://github.com/peterjohnhunt/atom-codekit-commands",
   "license": "MIT",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
