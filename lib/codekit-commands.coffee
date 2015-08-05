@@ -2,12 +2,23 @@ applescript = require('../inc/node-applescript/applescript');
 $ = require('../inc/jquery-2.1.4.min.js');
 {CompositeDisposable} = require 'atom'
 
-module.exports = CodekitCommands =
+module.exports =
   config:
-    someInt:
-      type: 'integer'
-      default: 23
-      minimum: 1
+    autoPause:
+      title: 'Auto Pause Codekit Filewatching'
+      description: 'Auto pause/unpause Codekit file watching when Atom window is/isn\'t in focus'
+      type: 'boolean'
+      default: true
+    autoStart:
+      title: 'Auto Start Codekit'
+      description: 'Auto start Codekit when Atom window is opened'
+      type: 'boolean'
+      default: true
+    autoQuit:
+      title: 'Auto Quit Codekit'
+      description: 'Auto quit Codekit when Atom window is closed'
+      type: 'boolean'
+      default: true
 
   subscriptions: null
 
@@ -26,14 +37,15 @@ module.exports = CodekitCommands =
   deactivate: ->
     @subscriptions.dispose()
 
-
   startCodekit: ->
-    script = 'tell application "CodeKit" to launch'
-    applescript.execString(script)
+    if atom.config.get('codekit-commands.autoStart')
+      script = 'tell application "CodeKit" to launch'
+      applescript.execString(script)
 
   quitCodekit: ->
-    script = 'tell application "CodeKit" to quit'
-    applescript.execString(script)
+    if atom.config.get('codekit-commands.autoQuit')
+      script = 'tell application "CodeKit" to quit'
+      applescript.execString(script)
 
   previewProject: ->
     script = 'tell application "CodeKit" to preview in browser'
@@ -58,9 +70,11 @@ module.exports = CodekitCommands =
           applescript.execString(script)
 
   pauseProject: ->
-    script = "tell application \"CodeKit\" to pause file watching"
-    applescript.execString(script)
+    if atom.config.get('codekit-commands.autoPause')
+      script = "tell application \"CodeKit\" to pause file watching"
+      applescript.execString(script)
 
   unpauseProject: ->
-    script = "tell application \"CodeKit\" to unpause file watching"
-    applescript.execString(script)
+    if atom.config.get('codekit-commands.autoPause')
+      script = "tell application \"CodeKit\" to unpause file watching"
+      applescript.execString(script)
