@@ -19,6 +19,11 @@ module.exports =
       description: 'Auto quit Codekit when Atom window is closed'
       type: 'boolean'
       default: true
+    autoSwitch:
+      title: 'Auto Switch Codekit Project'
+      description: 'Auto switch Codekit project on file change'
+      type: 'boolean'
+      default: true
 
   subscriptions: null
 
@@ -48,11 +53,17 @@ module.exports =
       applescript.execString(script)
 
   previewProject: ->
-    script = 'tell application "CodeKit" to preview in browser'
+    script = 'tell application \"CodeKit\" to preview in browser'
     applescript.execString(script)
 
   refreshProject: ->
-    script = 'tell application "CodeKit" to refresh browsers'
+    newPanel = atom.workspace.getActivePaneItem()
+    if newPanel
+      if newPanel.buffer
+        if newPanel.buffer.file
+          script = "tell application \"CodeKit\" to select project containing path \"#{newPanel.buffer.file.path}\""
+          applescript.execString(script)
+    script = 'tell application \"CodeKit\" to refresh browsers'
     applescript.execString(script)
 
   addProject: ->
@@ -63,11 +74,12 @@ module.exports =
     applescript.execString(script)
 
   switchProject: (newPanel) ->
-    if newPanel
-      if newPanel.buffer
-        if newPanel.buffer.file
-          script = "tell application \"CodeKit\" to select project containing path \"#{newPanel.buffer.file.path}\""
-          applescript.execString(script)
+    if atom.config.get('codekit-commands.autoSwitch')
+        if newPanel
+          if newPanel.buffer
+            if newPanel.buffer.file
+              script = "tell application \"CodeKit\" to select project containing path \"#{newPanel.buffer.file.path}\""
+              applescript.execString(script)
 
   pauseProject: ->
     if atom.config.get('codekit-commands.autoPause')
