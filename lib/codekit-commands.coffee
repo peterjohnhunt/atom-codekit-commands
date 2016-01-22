@@ -66,7 +66,6 @@ module.exports =
     treeView = atom.packages.getLoadedPackage('tree-view');
     treeView = require(treeView.mainModulePath);
     packageObj = treeView.serialize();
-    console.log packageObj.selectedPath
     script = "tell application \"CodeKit\" to add project at path \"#{packageObj.selectedPath}\""
     applescript.execString(script)
 
@@ -74,7 +73,6 @@ module.exports =
     if newPanel
       if newPanel.buffer
         if newPanel.buffer.file
-          console.log newPanel.buffer.file.path
           script = "tell application \"CodeKit\" to select project containing path \"#{newPanel.buffer.file.path}\""
           applescript.execString(script)
 

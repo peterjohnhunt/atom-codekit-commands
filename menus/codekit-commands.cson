@@ -3,13 +3,13 @@
   '.project-root > .header': [
     {
       'label': 'Add Project To Codekit'
-      'command': 'atom-codekit:addProject'
+      'command': 'codekit-commands:addProject'
     }
   ],
   'atom-text-editor': [
     {
       'label': 'Preview Project'
-      'command': 'atom-codekit:previewProject'
+      'command': 'codekit-commands:previewProject'
     }
   ]
 'menu': [
@@ -20,7 +20,7 @@
       'submenu': [
         {
           'label': 'Preview Project'
-          'command': 'atom-codekit:previewProject'
+          'command': 'codekit-commands:previewProject'
         }
       ]
     ]
