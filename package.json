@@ -1,7 +1,7 @@
 {
   "name": "codekit-commands",
   "main": "./lib/codekit-commands",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "Auto switch codekit projects and preview projects with a hotkey!",
   "keywords": [
     "Codekit",
