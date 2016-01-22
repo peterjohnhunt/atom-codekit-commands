@@ -28,12 +28,12 @@ module.exports =
   subscriptions: null
 
   activate: ->
-    @switchProject(atom.workspace.getActivePaneItem())
+    @startCodekit()
     @subscriptions = new CompositeDisposable
     @subscriptions.add atom.commands.add 'atom-workspace', 'codekit-commands:previewProject': => @previewProject()
     @subscriptions.add atom.commands.add 'atom-workspace', 'codekit-commands:refreshProject': => @refreshProject()
     @subscriptions.add atom.commands.add '.project-root > .header', 'codekit-commands:addProject': => @addProject()
-    @subscriptions.add atom.workspace.onDidChangeActivePaneItem (callback) => @switchProject(callback)
+    @subscriptions.add atom.workspace.onDidChangeActivePaneItem (callback) => @autoSwitchProject(callback)
     @subscriptions.add $(window).on 'load', => @startCodekit()
     @subscriptions.add $(window).on 'unload', => @quitCodekit()
     @subscriptions.add $(window).on 'blur', => @pauseProject()
@@ -44,6 +44,7 @@ module.exports =
 
   startCodekit: ->
     if atom.config.get('codekit-commands.autoStart')
+      @switchProject(atom.workspace.getActivePaneItem())
       script = 'tell application "CodeKit" to launch'
       applescript.execString(script)
 
@@ -57,12 +58,7 @@ module.exports =
     applescript.execString(script)
 
   refreshProject: ->
-    newPanel = atom.workspace.getActivePaneItem()
-    if newPanel
-      if newPanel.buffer
-        if newPanel.buffer.file
-          script = "tell application \"CodeKit\" to select project containing path \"#{newPanel.buffer.file.path}\""
-          applescript.execString(script)
+    @switchProject(atom.workspace.getActivePaneItem())
     script = 'tell application \"CodeKit\" to refresh browsers'
     applescript.execString(script)
 
@@ -70,16 +66,21 @@ module.exports =
     treeView = atom.packages.getLoadedPackage('tree-view');
     treeView = require(treeView.mainModulePath);
     packageObj = treeView.serialize();
+    console.log packageObj.selectedPath
     script = "tell application \"CodeKit\" to add project at path \"#{packageObj.selectedPath}\""
     applescript.execString(script)
 
   switchProject: (newPanel) ->
+    if newPanel
+      if newPanel.buffer
+        if newPanel.buffer.file
+          console.log newPanel.buffer.file.path
+          script = "tell application \"CodeKit\" to select project containing path \"#{newPanel.buffer.file.path}\""
+          applescript.execString(script)
+
+  autoSwitchProject: (newPanel) ->
     if atom.config.get('codekit-commands.autoSwitch')
-        if newPanel
-          if newPanel.buffer
-            if newPanel.buffer.file
-              script = "tell application \"CodeKit\" to select project containing path \"#{newPanel.buffer.file.path}\""
-              applescript.execString(script)
+      @switchProject(newPanel)
 
   pauseProject: ->
     if atom.config.get('codekit-commands.autoPause')
