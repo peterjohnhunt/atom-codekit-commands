@@ -33,10 +33,10 @@ module.exports =
 		@subscriptions.add atom.commands.add 'atom-workspace', 'codekit-commands:refreshProject': => @refreshProject()
 		@subscriptions.add atom.commands.add '.project-root > .header', 'codekit-commands:addProject': => @addProject()
 		@subscriptions.add atom.workspace.onDidChangeActivePaneItem (callback) => @autoSwitchProject(callback)
-		$(window).on 'load', => @startCodekit()
-		$(window).on 'unload', => @quitCodekit()
-		$(window).on 'blur', => @pauseProject()
-		$(window).on 'focus', => @unpauseProject()
+		$(window).on 'load', @startCodekit
+		$(window).on 'unload', @quitCodekit
+		$(window).on 'blur', @pauseProject
+		$(window).on 'focus', @unpauseProject
 
 		@startCodekit()
 
@@ -91,3 +91,7 @@ module.exports =
 
 	deactivate: ->
 		@subscriptions.dispose()
+		$(window).off 'load', @startCodekit
+		$(window).off 'unload', @quitCodekit
+		$(window).off 'blur', @pauseProject
+		$(window).off 'focus', @unpauseProject
